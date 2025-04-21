@@ -22,8 +22,15 @@ Route::get('/',[DashboardController::class, 'index']);
 
 
 Route::group(['prefix'=> 'level'], function(){
-    Route::get('/', [LevelController::class, 'index']);
-    Route::get('/list',[LevelController::class, 'list']);
+        Route::get('/', [LevelController::class, 'index'])->name('level.index');
+        Route::get('/list', [LevelController::class, 'list'])->name('level.list');
+    
+        // Tambahan routing create, store, edit, update, delete
+        Route::get('/create', [LevelController::class, 'create'])->name('level.create');
+        Route::post('/store', [LevelController::class, 'store'])->name('level.store');
+        Route::get('/edit/{id}', [LevelController::class, 'edit'])->name('level.edit');
+        Route::post('/update/{id}', [LevelController::class, 'update'])->name('level.update');
+        Route::delete('/delete/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
 });
 
 
