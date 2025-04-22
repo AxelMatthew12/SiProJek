@@ -74,16 +74,19 @@ class LevelController extends Controller
         return redirect()->route('level.index')->with('success', 'Level berhasil diperbarui');
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $level = Level::find($id);
 
         if (!$level) {
             return redirect()->route('level.index')->with('error', 'Level tidak ditemukan');
         }
+        try {
+            Level::destroy($id);
 
-        $level->delete();
-
-        return redirect()->route('level.index')->with('success', 'Level berhasil dihapus');
+            return redirect('/level')->with('success', 'Data user berhasil dihapus');
+        }catch(\Illuminate\Database\QueryException $e){
+            return redirect('/level')->with('eror', 'Data user gagal dihapus karena masih terdapat tabel lain yang tekait dengan data ini');
+        }
     }
 }

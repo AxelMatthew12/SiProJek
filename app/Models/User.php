@@ -26,8 +26,11 @@ class User extends Authenticatable
         'bio'
     ];
 
+    protected $hidden = ['password'];
+    protected $casts = ['password' => 'hashed'];
+
     public function level()
     {
-        return $this->belongsTo(Level::class, 'level_id');
+        return $this->belongsTo(Level::class, 'level_id', 'level_id');
     }
 }

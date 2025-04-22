@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LevelController;
@@ -19,7 +20,17 @@ use App\Http\Controllers\UserController;
 |
 */
 
+
+Route::pattern('id','[0-9]+');
+
+Route::get('login', [AuthController::class,'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+
+Route::middleware(['auth'])-> group(function(){
+    
 Route::get('/',[DashboardController::class, 'index']);
+});
 
 
 Route::group(['prefix'=> 'level'], function(){
@@ -31,7 +42,7 @@ Route::group(['prefix'=> 'level'], function(){
         Route::post('/store', [LevelController::class, 'store'])->name('level.store');
         Route::get('/edit/{id}', [LevelController::class, 'edit'])->name('level.edit');
         Route::post('/update/{id}', [LevelController::class, 'update'])->name('level.update');
-        Route::delete('/delete/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
+        Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
 });
 
 
