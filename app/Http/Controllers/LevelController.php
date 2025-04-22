@@ -14,7 +14,7 @@ class LevelController extends Controller
             'activeMenu' => 'level'
         ]);
     }
-    // menampilkan isi data tabel
+
     public function list(Request $request)
     {
         if ($request->ajax()) {
@@ -36,11 +36,13 @@ class LevelController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_level' => 'required|string|max:50|unique:m_level,nama_level'
+            'level_kode' => 'required|string|max:20|unique:m_level,level_kode',
+            'level_nama' => 'required|string|max:50|unique:m_level,level_nama'
         ]);
 
         Level::create([
-            'nama_level' => $request->nama_level
+            'level_kode' => $request->level_kode,
+            'level_nama' => $request->level_nama
         ]);
 
         return redirect()->route('level.index')->with('success', 'Level berhasil ditambahkan');
@@ -61,10 +63,12 @@ class LevelController extends Controller
         $level = Level::findOrFail($id);
 
         $request->validate([
-            'nama_level' => 'required|string|max:50|unique:m_level,nama_level,' . $id . ',level_id'
+            'level_kode' => 'required|string|max:20|unique:m_level,level_kode,' . $id . ',level_id',
+            'level_nama' => 'required|string|max:50|unique:m_level,level_nama,' . $id . ',level_id'
         ]);
 
-        $level->nama_level = $request->nama_level;
+        $level->level_kode = $request->level_kode;
+        $level->level_nama = $request->level_nama;
         $level->save();
 
         return redirect()->route('level.index')->with('success', 'Level berhasil diperbarui');
