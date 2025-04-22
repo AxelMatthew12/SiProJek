@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -42,4 +43,16 @@ Route::group(['prefix'=> 'user'], function(){
 Route::group(['prefix'=> 'category'], function(){
     Route::get('/', [CategoryController::class, 'index']);
     Route::get('/list',[CategoryController::class, 'list']);
+});
+
+Route::group(['prefix'=> 'project'], function() {
+    Route::get('/',[ProjectController::class,'index'])->name('project.index');;
+    Route::get('/list', [ProjectController::class, 'list'])->name('project.list');
+
+    Route::get('/create', [ProjectController::class, 'create'])->name('project.create');
+    Route::post('/store', [ProjectController::class, 'store'])->name('project.store');
+    Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+    Route::post('/update/{id}', [ProjectController::class, 'update'])->name('project.update');
+    Route::delete('/delete/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+    
 });

@@ -1,7 +1,7 @@
  <!-- Brand Logo -->
  <a href="{{ asset('adminlte/index3.html')}}" class="brand-link">
     <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">AdminLTE 3</span>
+    <span class="brand-text font-weight-light">SiProject</span>
   </a>
   <div class="sidebar">
     <!-- SidebarSearch Form -->
@@ -45,7 +45,7 @@
             </li>
             <li class="nav-header">Project Information</li>
             <li class="nav-item">
-                <a href="{{ url('/kategori') }}" class="nav-link {{ $activeMenu == 'kategori' ? 'active' : '' }} ">
+                <a href="{{ url('/project') }}" class="nav-link {{ $activeMenu == 'project' ? 'active' : '' }} ">
                     <i class="nav-icon far fa-bookmark"></i>
                     <p>Project</p>
                 </a>
