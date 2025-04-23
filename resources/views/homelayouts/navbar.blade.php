@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a class="nav-link" href="#informasi">Informasi</a></li>
-                {{-- <li class="nav-item"><a class="nav-link" href="{{url(path: '/view')}}">Job Views</a></li> --}}
+                <li class="nav-item"><a class="nav-link" href="#">Job Views</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/logout') }}">Logout</a></li>
             </ul>

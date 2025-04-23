@@ -28,6 +28,10 @@ Route::get('login', [AuthController::class,'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+// Menyimpan data registras
+Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+
 Route::middleware(['auth'])-> group(function(){
  
     Route::get('/',[DashboardController::class, 'index']);
