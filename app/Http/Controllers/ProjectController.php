@@ -19,15 +19,19 @@ class ProjectController extends Controller
     public function list(Request $request)
     {
         if ($request->ajax()) {
-            $data = Project::select([
-                'project_id', 'judul_project', 'bujed_min', 'bujed_max', 'status', 'tanggal_posting', 'deadline'
-            ]);
+            $data = Project::with('category')  // Pastikan relasi 'kategori' sudah ada
+                ->select(['project_id', 'judul_project', 'bujed_min', 'bujed_max', 'tanggal_posting', 'deadline', 'kategori_id']);
+    
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('kategori_nama', function($row){
+                    return $row->kategori->kategori_nama ?? '-';
+                })
                 ->make(true);
         }
         return response()->json(['message' => 'Invalid request'], 400);
     }
+    
 
     public function create()
     {
@@ -35,28 +39,31 @@ class ProjectController extends Controller
 
         return view('project.create', [
             'activeMenu' => 'project',
-            'categories' => $categories
+            'category' => $categories
         ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'category_id' => 'required|exists:category,category_id',
-            'judul_project' => 'required|string|max:100',
+        // Debug log
+    
+        $validated = $request->validate([
+            'user_id' => 'required|exists:m_user,user_id',
+            'kategori_id' => 'required|exists:m_category,kategori_id',
+            'judul_project' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'bujed_min' => 'required|integer',
-            'bujed_max' => 'required|integer|gte:bujed_min',
+            'bujed_min' => 'required|numeric',
+            'bujed_max' => 'required|numeric|gte:bujed_min',
             'tanggal_posting' => 'required|date',
-            'deadline' => 'required|date|after:tanggal_posting',
-            'status' => 'required|string|max:20'
+            'deadline' => 'required|date|after_or_equal:tanggal_posting',
         ]);
-
-        Project::create($request->all());
-
-        return redirect()->route('project.index')->with('success', 'Project berhasil ditambahkan');
+    
+        Project::create($validated);
+    
+        return redirect()->route('project.index')->with('success', 'Project berhasil disimpan.');
     }
+    
+    
 
     public function edit($id)
     {
@@ -81,7 +88,6 @@ class ProjectController extends Controller
             'bujed_max' => 'required|integer|gte:bujed_min',
             'tanggal_posting' => 'required|date',
             'deadline' => 'required|date|after:tanggal_posting',
-            'status' => 'required|string|max:20'
         ]);
 
         $project->update($request->all());

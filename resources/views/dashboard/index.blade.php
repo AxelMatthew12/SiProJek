@@ -28,7 +28,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Blank Page</h1>
+            <h1>Dashboard</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -83,6 +83,6 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('adminlte/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset('adminlte/dist/js/demo.js')}}"></script>
+{{-- <script src="{{ asset('adminlte/dist/js/demo.js')}}"></script> --}}
 </body>
 </html>

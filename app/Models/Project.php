@@ -34,8 +34,8 @@ class Project extends Model
     }
 
     // Relasi ke Kategori
-    public function kategori()
+    public function category()
     {
-        return $this->belongsTo(Category::class, 'kategori_id');
+        return $this->belongsTo(Category::class, 'kategori_id', 'kategori_id');
     }
 }

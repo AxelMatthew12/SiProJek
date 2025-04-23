@@ -17,4 +17,10 @@ class Category extends Model
         'kategori_kode',
         'kategori_nama'
     ];
+    // Model Category.php
+public function projects()
+{
+    return $this->hasMany(Project::class, 'kategori_id', 'kategori_id');
+}
+
 }

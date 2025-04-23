@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
@@ -28,10 +29,13 @@ Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 Route::middleware(['auth'])-> group(function(){
-    
-Route::get('/',[DashboardController::class, 'index']);
+ 
+    Route::get('/',[DashboardController::class, 'index']);
+   
 });
 
+
+Route::get('/dashboard',[DashboardController::class, 'dashboard']);
 
 Route::group(['prefix'=> 'level'], function(){
         Route::get('/', [LevelController::class, 'index'])->name('level.index');
@@ -40,8 +44,8 @@ Route::group(['prefix'=> 'level'], function(){
         // Tambahan routing create, store, edit, update, delete
         Route::get('/create', [LevelController::class, 'create'])->name('level.create');
         Route::post('/store', [LevelController::class, 'store'])->name('level.store');
-        Route::get('/edit/{id}', [LevelController::class, 'edit'])->name('level.edit');
-        Route::post('/update/{id}', [LevelController::class, 'update'])->name('level.update');
+        Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
+        Route::put('/update/{id}', [LevelController::class, 'update'])->name('level.update');
         Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
 });
 
@@ -57,13 +61,13 @@ Route::group(['prefix'=> 'category'], function(){
 });
 
 Route::group(['prefix'=> 'project'], function() {
-    Route::get('/',[ProjectController::class,'index'])->name('project.index');;
+    Route::get('/',[ProjectController::class,'index'])->name('project.index');
     Route::get('/list', [ProjectController::class, 'list'])->name('project.list');
 
     Route::get('/create', [ProjectController::class, 'create'])->name('project.create');
     Route::post('/store', [ProjectController::class, 'store'])->name('project.store');
     Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
-    Route::post('/update/{id}', [ProjectController::class, 'update'])->name('project.update');
+    Route::put('/update/{id}', [ProjectController::class, 'update'])->name('project.update');
     Route::delete('/delete/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
     
 });

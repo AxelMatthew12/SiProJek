@@ -7,21 +7,21 @@
     <form action="{{ route('project.store') }}" method="POST">
         @csrf
 
-        <div class="form-group mb-3">
-            <label for="user_id">User ID</label>
-            <input type="number" name="user_id" id="user_id"
-                class="form-control @error('user_id') is-invalid @enderror"
-                value="{{ old('user_id') }}" required>
-            @error('user_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+        <!-- Hidden Field untuk user_id -->
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
 
         <div class="form-group mb-3">
-            <label for="kategori_id">Kategori ID</label>
-            <input type="number" name="kategori_id" id="kategori_id"
-                class="form-control @error('kategori_id') is-invalid @enderror"
-                value="{{ old('kategori_id') }}" required>
+            <label for="kategori_id">Kategori</label>
+            <select name="kategori_id" id="kategori_id"
+                class="form-control @error('kategori_id') is-invalid @enderror" required>
+                <option value="">-- Pilih Kategori --</option>
+                @foreach ($category as $item)
+                    <option value="{{ $item->kategori_id }}"
+                        {{ old('kategori_id') == $item->kategori_id ? 'selected' : '' }}>
+                        {{ $item->kategori_nama }}
+                    </option>
+                @endforeach
+            </select>
             @error('kategori_id')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -87,23 +87,12 @@
             @enderror
         </div>
 
-        <div class="form-group mb-4">
-            <label for="status">Status</label>
-            <input type="text" name="status" id="status"
-                class="form-control @error('status') is-invalid @enderror"
-                value="{{ old('status') }}" required>
-            @error('status')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save"></i> Simpan
         </button>
         <a href="{{ route('project.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Kembali
         </a>
-
     </form>
 </div>
 @endsection

@@ -8,8 +8,16 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        return view('homepages.index', [
+            'activeMenu' => 'homepage'
+        ]);
+    }
+    public function dashboard()
+    {
         return view('dashboard.index', [
             'activeMenu' => 'dashboard'
         ]);
     }
+
+    
 }
