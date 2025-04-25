@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Category;
+use App\Models\ProjectOffers;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     public function index()
-    {
+    {   $projects = Project::with('category')->get();
         return view('project.index', [
+            'projects' => $projects,
             'activeMenu' => 'project'
         ]);
     }
@@ -25,7 +28,7 @@ class ProjectController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kategori_nama', function($row){
-                    return $row->kategori->kategori_nama ?? '-';
+                    return $row->category->kategori_nama ?? '-';
                 })
                 ->make(true);
         }
@@ -107,4 +110,64 @@ class ProjectController extends Controller
 
         return redirect()->route('project.index')->with('success', 'Project berhasil dihapus');
     }
+
+    // project view function on landing pace 
+    public function show()
+    {
+        $projects = Project::with('category')->get();  // Mengambil semua proyek dengan kategori
+        return view('homepages.index', [
+            'projects' => $projects,  // Kirim variabel 'projects' ke view
+            'activeMenu' => 'project'
+        ]);
+    }
+    public function showDetail($id)
+{
+    $project = Project::with('category')->findOrFail($id);
+    return view('project.detail', [
+        'project' => $project
+    ]);
+}
+
+// Apply project functions
+
+// Menampilkan form apply untuk project tertentu
+public function apply($id)
+{
+    $project = Project::with('category')->findOrFail($id); // pastikan project valid dan ada
+
+    return view('homepages.apply', [
+        'project' => $project
+    ]);
+}
+
+// Menyimpan data penawaran project oleh user yang login
+public function applyStore(Request $request, $id)
+{
+    $project = Project::findOrFail($id); // pastikan ID valid, hindari apply ke project lain
+
+    $request->validate([
+        'penawaran_harga' => 'required|numeric|min:1000',
+        'penawaran_deskripsi' => 'required|string|max:1000',
+    ]);
+
+    // Cek apakah user sudah pernah apply ke project ini (opsional, anti spam)
+    $existingOffer = ProjectOffers::where('project_id', $project->project_id)
+        ->where('user_id', Auth::id())
+        ->first();
+
+    if ($existingOffer) {
+        return redirect()->route('project.apply', $id)->with('error', 'Anda sudah mengajukan penawaran untuk project ini.');
+    }
+
+    ProjectOffers::create([
+        'project_id' => $project->project_id,
+        'user_id' => Auth::id(),
+        'penawaran_harga' => $request->penawaran_harga,
+        'penawaran_deskripsi' => $request->penawaran_deskripsi,
+        'Tanggal_penawaran' => now(),
+    ]);
+
+    return redirect()->route('home')->with('success', 'Penawaran berhasil diajukan!');
+}
+
 }

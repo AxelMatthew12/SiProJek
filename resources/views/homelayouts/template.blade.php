@@ -16,10 +16,10 @@
             background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .navbar-nav .nav-link { color: #fff; transition: color 0.3s ease; }
+        .navbar-nav .nav-link { color: #ffffff; transition: color 0.3s ease; }
         .navbar.scrolled .nav-link { color: #000000; }
         .section-title h2 { font-weight: bold; }
-        .card-title a { text-decoration: none; color: #889CFE; }
+        .card-title a { text-decoration: none; color: #1c1c1c; }
         .card-title a:hover { text-decoration: underline; }
         footer { background-color: #000000; color: #fafafa; }
     </style>

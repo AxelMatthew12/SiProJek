@@ -10,68 +10,53 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-
 Route::pattern('id','[0-9]+');
 
+// === AUTH ===
 Route::get('login', [AuthController::class,'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-// Menyimpan data registras
 Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 
-Route::middleware(['auth'])-> group(function(){
- 
-    Route::get('/',[DashboardController::class, 'index']);
-   
-});
+// === PUBLIC ROUTES (TANPA AUTH) ===
+Route::get('/', [ProjectController::class, 'show'])->name('home'); // Ini untuk halaman utama dengan card project
+Route::get('/project/{id}/apply', [ProjectController::class, 'apply'])->name('project.apply');
+Route::post('/project/{id}/apply', [ProjectController::class, 'applyStore'])->name('project.apply.store');
 
 
-Route::get('/dashboard',[DashboardController::class, 'dashboard']);
+// === ADMIN / PROTECTED ROUTES ===
+Route::middleware(['auth'])->group(function() {
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.index');
 
-Route::group(['prefix'=> 'level'], function(){
+    Route::prefix('level')->group(function(){
         Route::get('/', [LevelController::class, 'index'])->name('level.index');
         Route::get('/list', [LevelController::class, 'list'])->name('level.list');
-    
-        // Tambahan routing create, store, edit, update, delete
         Route::get('/create', [LevelController::class, 'create'])->name('level.create');
         Route::post('/store', [LevelController::class, 'store'])->name('level.store');
         Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
         Route::put('/update/{id}', [LevelController::class, 'update'])->name('level.update');
         Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
-});
+    });
 
+    Route::prefix('user')->group(function(){
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::get('/list', [UserController::class, 'list'])->name('user.list');
+    });
 
-Route::group(['prefix'=> 'user'], function(){
-    Route::get('/', [UserController::class, 'index']);
-    Route::get('/list',[UserController::class, 'list']);
-});
+    Route::prefix('category')->group(function(){
+        Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+        Route::get('/list', [CategoryController::class, 'list'])->name('category.list');
+    });
 
-Route::group(['prefix'=> 'category'], function(){
-    Route::get('/', [CategoryController::class, 'index']);
-    Route::get('/list',[CategoryController::class, 'list']);
-});
-
-Route::group(['prefix'=> 'project'], function() {
-    Route::get('/',[ProjectController::class,'index'])->name('project.index');
-    Route::get('/list', [ProjectController::class, 'list'])->name('project.list');
-
-    Route::get('/create', [ProjectController::class, 'create'])->name('project.create');
-    Route::post('/store', [ProjectController::class, 'store'])->name('project.store');
-    Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
-    Route::put('/update/{id}', [ProjectController::class, 'update'])->name('project.update');
-    Route::delete('/delete/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
-    
+    Route::prefix('project')->group(function(){
+        Route::get('/', [ProjectController::class, 'index'])->name('project.index');
+        Route::get('/list', [ProjectController::class, 'list'])->name('project.list');
+        Route::get('/create', [ProjectController::class, 'create'])->name('project.create');
+        Route::post('/store', [ProjectController::class, 'store'])->name('project.store');
+        Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+        Route::put('/update/{id}', [ProjectController::class, 'update'])->name('project.update');
+        Route::delete('/delete/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+    });
 });

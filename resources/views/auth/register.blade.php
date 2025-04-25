@@ -24,7 +24,7 @@
     }
 
     .register-img {
-      background: url('https://images.unsplash.com/photo-1588776814546-ec7f05f381d7?fit=crop&w=1350&q=80') no-repeat center center;
+      background: url('{{ asset('image/login.png') }}') no-repeat center center;
       background-size: cover;
       flex: 1;
     }
